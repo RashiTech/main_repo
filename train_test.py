@@ -14,7 +14,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
 
-def train(model, device, train_loader, optimizer, epoch, scheduler, criterion):
+def train(model, device, train_loader, optimizer, epoch, scheduler, criterion, train_acc , train_losses):
   model.train()
   pbar = tqdm(train_loader)
   correct = 0
@@ -48,9 +48,8 @@ def train(model, device, train_loader, optimizer, epoch, scheduler, criterion):
 
     pbar.set_description(desc= f'Loss={loss.item()} Batch_id={batch_idx} Accuracy={100*correct/processed:0.2f}')
     train_acc.append(100*correct/processed)
-    return train_acc, train_losses
 
-def test(model, device, test_loader, criterion):
+def test(model, device, test_loader, criterion,test_acc , test_losses):
     model.eval()
     test_loss = 0
     correct = 0
@@ -70,4 +69,3 @@ def test(model, device, test_loader, criterion):
         100. * correct / len(test_loader.dataset)))
 
     test_acc.append(100. * correct / len(test_loader.dataset))
-    return test_acc, test_losses
