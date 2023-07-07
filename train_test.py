@@ -12,17 +12,7 @@ import numpy as np
 import torchvision
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
-
-
-
-
-
 from tqdm import tqdm
-
-train_losses = []
-test_losses = []
-train_acc = []
-test_acc = []
 
 def train(model, device, train_loader, optimizer, epoch, scheduler, criterion):
   model.train()
