@@ -5,7 +5,7 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torchsummary import summary
 from tqdm import tqdm
-from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
+from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau, OneCycleLR
 from matplotlib import pyplot as plt
 import numpy as np
 import torchvision
@@ -141,31 +141,6 @@ def plot_graphs(train_losses, train_acc,test_losses,test_acc):
   axs[0, 1].set_title("Test Loss")
   axs[1, 1].plot(test_acc)
   axs[1, 1].set_title("Test Accuracy")
-
-
-def plot_incorrect_predictions(predictions, class_map, count=10):
-    """Plot Incorrect predictions
-
-    Args:
-        predictions (list): List of all incorrect predictions
-        class_map (dict): Lable mapping
-        count (int, optional): Number of samples to print, multiple of 5. Defaults to 10.
-    """
-    print(f'Total Incorrect Predictions {len(predictions)}')
-
-    if not count % 5 == 0:
-        print("Count should be multiple of 10")
-        return
-
-    classes = list(class_map.values())
-
-    fig = plt.figure(figsize=(10, 5))
-    for i, (d, t, p, o) in enumerate(predictions):
-        ax = fig.add_subplot(int(count/5), 5, i + 1, xticks=[], yticks=[])
-        ax.set_title(f'{classes[t.item()]}/{classes[p.item()]}')
-        plt.imshow(d.cpu().numpy().transpose(1, 2, 0))
-        if i+1 == 5*(count/5):
-            break
 
 
 def get_incorrrect_predictions(model, loader, device):
