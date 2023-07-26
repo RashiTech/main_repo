@@ -14,7 +14,7 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm
 
-def train(model, device, train_loader, optimizer, epoch, scheduler, criterion, train_acc , train_losses):
+def train(model, device, train_loader, optimizer, epoch, sched, criterion, train_acc , train_losses):
   model.train()
   pbar = tqdm(train_loader)
   correct = 0
@@ -38,6 +38,14 @@ def train(model, device, train_loader, optimizer, epoch, scheduler, criterion, t
     # Backpropagation
     loss.backward()
     optimizer.step()
+    if sched == 'StepLR':
+        scheduler = StepLR(optimizer, step_size=100, gamma=0.25)    
+        sched_fl = 'X'
+    elif sched == 'OneCycle':
+        scheduler = OneCycleLR(optimizer=optimizer, max_lr=8.64E-04, epochs=EPOCHS, steps_per_epoch=len(trainloader), pct_start=5/EPOCHS, div_factor=10) 
+        sched_fl = 'X'
+    else:
+        sched_fl = ' '
     scheduler.step()
 
     # Update pbar-tqdm
