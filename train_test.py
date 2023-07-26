@@ -7,6 +7,7 @@ from torchvision import datasets, transforms
 from torchsummary import summary
 from tqdm import tqdm
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
+from torch.optim.lr_scheduler import OneCycleLR
 from matplotlib import pyplot as plt
 import numpy as np
 import torchvision
