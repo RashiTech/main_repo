@@ -280,7 +280,7 @@ class GradCAM:
 def generate_gradcam(misclassified_images, model, target_layers,device):
     images=[]
     labels=[]
-    for i, (img, pred, correct) in enumerate(misclassified_images):
+    for i, (img, pred, correct,x) in enumerate(misclassified_images):
         images.append(img)
         labels.append(correct)
     
@@ -322,7 +322,7 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
 
     images=[]
     labels=[]
-    for i, (img, pred, correct) in enumerate(misclassified_images):
+    for i, (img, pred, correct,x) in enumerate(misclassified_images):
       images.append(img)
       labels.append(correct)
 
