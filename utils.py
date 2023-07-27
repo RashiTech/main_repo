@@ -52,7 +52,7 @@ def set_albumen_params(mean, std):
 	    ToTensorV2()
 	    ]
 	)
-        return transform_train, transform_valid 
+	return transform_train, transform_valid 
 
 def load_data():
     transform = transforms.Compose(
