@@ -49,7 +49,7 @@ def train(model, device, train_loader, optimizer, epoch, sched, criterion, train
     # Backpropagation
     loss.backward()
     optimizer.step()
-    if sched_flag = 'X':
+    if sched_flag == 'X':
       scheduler.step()
 
     # Update pbar-tqdm
