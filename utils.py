@@ -162,9 +162,9 @@ def get_incorrrect_predictions(model, loader, device):
             output = model(data)
             loss = F.nll_loss(output, target)
             pred = output.argmax(dim=1)
-            for d, t, p, o in zip(data, target, pred, output):
-                if p.eq(t.view_as(p)).item() == False:
-                    incorrect.append([d.cpu(), t.cpu(), p.cpu(), o[p.item()].cpu()])
+            for image, target, pred in zip(data, target, pred):
+                if pred.eq(target.view_as(pred)).item() == False:
+                    incorrect.append([image.cpu(), target.cpu(), pred.cpu()])
 
     return incorrect
 
@@ -280,7 +280,7 @@ class GradCAM:
 def generate_gradcam(misclassified_images, model, target_layers,device):
     images=[]
     labels=[]
-    for i, (img, pred, correct,x) in enumerate(misclassified_images):
+    for i, (img, correct, pred) in enumerate(misclassified_images):
         images.append(img)
         labels.append(correct)
     
@@ -322,7 +322,7 @@ def plot_gradcam(gcam_layers, target_layers, class_names, image_size,predicted, 
 
     images=[]
     labels=[]
-    for i, (img, pred, correct,x) in enumerate(misclassified_images):
+    for i, (img, correct, pred) in enumerate(misclassified_images):
       images.append(img)
       labels.append(correct)
 
