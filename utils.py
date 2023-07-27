@@ -34,7 +34,7 @@ def tl_ts_mod(transform_train,transform_valid,batch_size=128):
     return trainset,trainloader,testset,testloader
 
 def set_albumen_params(mean, std):
-	train_transform = A.Compose(
+	transform_train = A.Compose(
   	  [
         A.PadIfNeeded(36,36),
         A.RandomCrop(32, 32),
@@ -46,7 +46,7 @@ def set_albumen_params(mean, std):
         ToTensorV2()
    	 ]
 	)
-	test_transform = A.Compose(
+	transform_valid = A.Compose(
 	    [
 	    A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
 	    ToTensorV2()
