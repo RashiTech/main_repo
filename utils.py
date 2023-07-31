@@ -164,8 +164,8 @@ def display_incorrect_images(mismatch, n=20 ):
     fig = plt.figure(figsize=(10,5))
     for img in display_images:
         image = img[0].squeeze().to('cpu').numpy()
-        pred = classes[img[1]]
-        actual = classes[img[2]]
+        pred = classes[img[2]]
+        actual = classes[img[1]]
         ax = fig.add_subplot(2, 5, index+1)
         ax.axis('off')
         ax.set_title(f'\n Predicted Label : {pred} \n Actual Label : {actual}',fontsize=10) 
