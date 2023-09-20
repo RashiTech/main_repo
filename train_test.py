@@ -118,9 +118,11 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
         
         smooth = 1e-5
         #pred = F.sigmoid(pred)
-    
+
+        #predicted class index
+           
         # flatten predictions and targets
-        pred = predicted.view(-1)
+        pred = (predicted == class_index).view(-1)
         target = (target == class_index).view(-1)
         
         intersection = (pred * target).sum()
