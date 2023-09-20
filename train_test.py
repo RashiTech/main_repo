@@ -111,8 +111,8 @@ def unet_dice_loss(pred, target):
     return 1 - dice   
 
 #for multi-class
-def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
-    dice_losses = torch.zeros(0, requires_grad=True)
+def dice_loss(predicted, target, num_classes=3, epsilon=1e-5, device='cuda'):
+    dice_losses = torch.zeros(0, requires_grad=True).to(device)
     sum=0
 
     
