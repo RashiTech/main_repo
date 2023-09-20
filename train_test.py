@@ -120,7 +120,7 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
         #pred = F.sigmoid(pred)
     
         # flatten predictions and targets
-        pred = pred.view(-1)
+        pred = predicted.view(-1)
         target = (target == class_index).view(-1)
         
         intersection = (pred * target).sum()
