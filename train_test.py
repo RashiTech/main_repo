@@ -114,7 +114,7 @@ def binary_dice_loss(pred, target):
 def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     dice_losses = []
     
-    for class_index in range(1, num_classes):  # Loop through all classes except background
+    for class_index in range(num_classes):  # Loop through all classes except background
         
         predicted_class = torch.argmax(predicted, 1)
         predicted_class = (predicted_class == class_index).float()
@@ -129,10 +129,10 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
         dice_coefficient = (2.0 * intersection + epsilon) / (union + epsilon)
         dice_loss = 1 - dice_coefficient
         
-        dice_losses.append(dice_loss)
+        dice_losses + = dice_loss
     
     # Calculate the average Dice loss for all classes (excluding background)
-    return sum(dice_losses) / len(dice_losses)
+    return dice_losses / num_classes
 
 
 
