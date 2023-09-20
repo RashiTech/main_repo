@@ -117,7 +117,7 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     for class_index in range(1, num_classes):  # Loop through all classes except background
         
         predicted_class = torch.argmax(predicted, 1)
-        #predicted_class = predicted_class[:, class_index]
+        predicted_class = (predicted_class == class_index).float()
         target_class = (target == class_index).float()
         
         predicted_class = predicted_class.view(-1)
