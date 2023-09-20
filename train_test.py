@@ -116,20 +116,20 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     
     for class_index in range(num_classes):  # Loop through all classes except background
         
-        predicted_class = torch.argmax(predicted, 1)
-        predicted_class = (predicted_class == class_index).float()
-        target_class = (target == class_index).float()
+        smooth = 1e-5
+        #pred = F.sigmoid(pred)
+    
+        # flatten predictions and targets
+        pred = pred.view(-1)
+        target = (target == class_index).view(-1)
         
-        predicted_class = predicted_class.view(-1)
-        target_class = target_class.view(-1)
+        intersection = (pred * target).sum()
+        union = pred.sum() + target.sum()
         
-        intersection = torch.sum(predicted_class * target_class)
-        union = torch.sum(predicted_class) + torch.sum(target_class)
+        dice = (2. * intersection + smooth) / (union + smooth)
         
-        dice_coefficient = (2.0 * intersection + epsilon) / (union + epsilon)
-        dice_loss = 1 - dice_coefficient
-        
-        dice_losses + = dice_loss
+        dice_loss = 1 - dice   
+        dice_losses += dice_loss
     
     # Calculate the average Dice loss for all classes (excluding background)
     return dice_losses / num_classes
