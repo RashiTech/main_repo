@@ -112,7 +112,7 @@ def binary_dice_loss(pred, target):
 
 #for multi-class
 def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
-    dice_losses = []
+    dice_losses = 0
     
     for class_index in range(num_classes):  # Loop through all classes except background
         
