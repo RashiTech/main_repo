@@ -111,7 +111,7 @@ def fit_model_unet(model, optimizer, criterion, trainloader, testloader, EPOCHS,
     return 1 - dice   
 
 #for multi-class
-def dice_loss(predicted, target, num_classes, epsilon=1e-5):
+def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     dice_losses = []
     
     for class_index in range(1, num_classes):  # Loop through all classes except background
