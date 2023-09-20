@@ -113,6 +113,7 @@ def binary_dice_loss(pred, target):
 #for multi-class
 def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     dice_losses = torch.zeros(0, requires_grad=True)
+    sum=0
 
     
     for class_index in range(num_classes):  # Loop through all classes except background
@@ -121,8 +122,7 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
         #pred = F.sigmoid(pred)
 
         #predicted class index
-           
-        # flatten predictions and targets
+        #flatten predictions and targets
         pred = (predicted == class_index).view(-1)
         target = (target == class_index).view(-1)
         
@@ -132,10 +132,11 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
         dice = (2. * intersection + smooth) / (union + smooth)
         
         dice_loss = 1 - dice   
-        dice_losses += dice_loss
+        sum += dice_loss
     
     # Calculate the average Dice loss for all classes (excluding background)
-    return dice_losses / num_classes
+    dice_losses = sum/num_classes
+    return dice_losses
 
 
 
