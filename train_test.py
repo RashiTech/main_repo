@@ -95,7 +95,7 @@ def fit_model_unet(model, optimizer, criterion, trainloader, testloader, EPOCHS,
     return model, train_losses, test_losses
 
 # for binary class
-def _binary_dice_loss(pred, target):
+def binary_dice_loss(pred, target):
     smooth = 1e-5
     #pred = F.sigmoid(pred)
 
