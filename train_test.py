@@ -112,7 +112,7 @@ def binary_dice_loss(pred, target):
 
 #for multi-class
 def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
-    dice_losses = torch.empty(size=1, requires_grad=True)
+    dice_losses = torch.zeros(0, requires_grad=True)
 
     
     for class_index in range(num_classes):  # Loop through all classes except background
