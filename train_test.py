@@ -115,8 +115,13 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5):
     dice_losses = []
     
     for class_index in range(1, num_classes):  # Loop through all classes except background
-        predicted_class = predicted[:, class_index]
+        
+        predicted_class = torch.argmax(predicted, 1)
+        #predicted_class = predicted_class[:, class_index]
         target_class = (target == class_index).float()
+        
+        predicted_class = predicted_class.view(-1)
+        target_class = target_class.view(-1)
         
         intersection = torch.sum(predicted_class * target_class)
         union = torch.sum(predicted_class) + torch.sum(target_class)
