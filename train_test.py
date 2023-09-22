@@ -112,10 +112,9 @@ def unet_dice_loss(pred, target):
 
 #for multi-class
 def dice_loss(predicted, target, num_classes=3, epsilon=1e-5, device='cuda'):
-    dice_losses = torch.zeros(0, requires_grad=True).to(device)
-    sum=0
-
     
+    sum=0
+   
     for class_index in range(num_classes):  # Loop through all classes except background
         
         smooth = 1e-5
@@ -123,7 +122,8 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5, device='cuda'):
 
         #predicted class index
         #flatten predictions and targets
-        pred = (predicted == class_index).view(-1)
+        pred = predicted[:, class_index].view(-1)
+        
         target = (target == class_index).view(-1)
         
         intersection = (pred * target).sum()
@@ -135,7 +135,11 @@ def dice_loss(predicted, target, num_classes=3, epsilon=1e-5, device='cuda'):
         sum += dice_loss
     
     # Calculate the average Dice loss for all classes (excluding background)
-    dice_losses = sum/num_classes
+    
+    mean_dice_loss = sum/num_classes
+    
+    dice_losses = torch.tensor(mean_dice_loss, requires_grad=True).to(device)
+
     return dice_losses
 
 
@@ -249,44 +253,3 @@ def test(model, device, test_loader, criterion,test_acc , test_losses):
 
     test_acc.append(100. * correct / len(test_loader.dataset))
 
-def train_vae(model, device, train_loader, optimizer, epoch, train_losses,criterion,scheduler):
-
-    model.train()
-    pbar = tqdm(train_loader)
-    train_loss = 0
-
-    for batch_idx, (data, target) in enumerate(pbar):
-        # get samples
-        data, target = data.to(device), target.to(device)
-
-        # Init
-        optimizer.zero_grad()
-        # In PyTorch, we need to set the gradients to zero before starting to do backpropragation because PyTorch accumulates the gradients on subsequent backward passes. 
-        # Because of this, when you start your training loop, ideally you should zero out the gradients so that you do the parameter update correctly.
-
-        # Predict
-        X_hat, mean, logvar = model(data,target)
-
-        # Calculate loss
-        reconstruction_loss = criterion(X_hat, data)
-        KL_divergence = 0.5 * torch.sum(-1 - logvar + torch.exp(logvar) + mean**2)
-        loss_tot = reconstruction_loss + KL_divergence
-
-        train_loss += loss_tot.item()
-
-        # Backpropagation
-        loss_tot.backward()
-        optimizer.step() 
-    
-    train_losses.append(train_loss/len(train_loader.dataset))
-
-    print(f'\nAverage Training Loss={train_loss/len(train_loader.dataset)}')
-
-def fit_model_vae(model, optimizer, criterion, trainloader, EPOCHS, device,scheduler=None):
-    train_losses = []
-    
-    for epoch in range(EPOCHS):
-        print("\nEPOCH: {} (LR: {})".format(epoch+1, optimizer.param_groups[0]['lr']))
-        train_vae(model, device, trainloader, optimizer, epoch, train_losses, criterion,scheduler)
-
-    return model, train_losses
